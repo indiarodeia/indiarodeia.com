@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { portfolioEnabled } from "@/config/site";
 
 const ProjectsSection = () => {
   const { lang, t } = useLanguage();
@@ -23,43 +24,61 @@ const ProjectsSection = () => {
         </div>
 
         <div className="space-y-4">
-          {projects.slice(0, 4).map((project, index) => (
-            <Link
-              to={`/portfolio/${project.slug}`}
-              key={project.slug}
-              className="group block rounded-2xl border border-border bg-background/60 backdrop-blur-sm p-6 sm:p-8 md:p-10 cursor-pointer hover:bg-background hover:shadow-elevated transition-all duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <div className="flex flex-col md:flex-row md:items-center gap-4 sm:gap-6 md:gap-10">
-                <span className="font-mono text-sm text-accent font-bold w-8 shrink-0" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1 space-y-1 sm:space-y-2">
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-heading font-semibold text-foreground group-hover:text-accent transition-colors duration-300">
-                      {project.title}
-                    </h3>
-                    <ArrowUpRight size={22} className="text-muted-foreground group-hover:text-accent shrink-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 mt-1 hidden sm:block" aria-hidden="true" />
+          {portfolioEnabled ? (
+            projects.slice(0, 4).map((project, index) => (
+              <Link
+                to={`/portfolio/${project.slug}`}
+                key={project.slug}
+                className="group block rounded-2xl border border-border bg-background/60 backdrop-blur-sm p-6 sm:p-8 md:p-10 cursor-pointer hover:bg-background hover:shadow-elevated transition-all duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                <div className="flex flex-col md:flex-row md:items-center gap-4 sm:gap-6 md:gap-10">
+                  <span className="font-mono text-sm text-accent font-bold w-8 shrink-0" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex-1 space-y-1 sm:space-y-2">
+                    <div className="flex items-start justify-between gap-4">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-heading font-semibold text-foreground group-hover:text-accent transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                      <ArrowUpRight size={22} className="text-muted-foreground group-hover:text-accent shrink-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 mt-1 hidden sm:block" aria-hidden="true" />
+                    </div>
+                    <p className="text-xs text-muted-foreground font-mono uppercase tracking-wider">{project.subtitle}</p>
+                    <p className="text-muted-foreground text-sm max-w-xl leading-relaxed hidden md:block">{project.description}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground font-mono uppercase tracking-wider">{project.subtitle}</p>
-                  <p className="text-muted-foreground text-sm max-w-xl leading-relaxed hidden md:block">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 md:justify-end shrink-0">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="text-xs font-mono text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-full group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2 md:justify-end shrink-0">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="text-xs font-mono text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-full group-hover:bg-accent/10 group-hover:text-accent transition-colors">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="rounded-3xl border border-border bg-background/70 backdrop-blur-sm p-8 sm:p-10 md:p-12">
+              <div className="max-w-3xl space-y-5">
+                <span className="inline-flex items-center rounded-full border border-accent/20 bg-accent/5 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-accent">
+                  {t.projects.soonBadge[lang]}
+                </span>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-foreground">
+                  {t.projects.soonTitle[lang]}
+                </h3>
+                <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
+                  {t.projects.soonText[lang]}
+                </p>
               </div>
-            </Link>
-          ))}
+            </div>
+          )}
         </div>
 
-        <div className="text-center mt-12 sm:mt-16">
-          <Link to="/portfolio" className="inline-flex items-center gap-2 bg-gradient-brand text-accent-foreground px-8 py-3 rounded-full text-sm font-semibold hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
-            {t.projects.viewAll[lang]} <ArrowUpRight size={16} />
-          </Link>
-        </div>
+        {portfolioEnabled && (
+          <div className="text-center mt-12 sm:mt-16">
+            <Link to="/portfolio" className="inline-flex items-center gap-2 bg-gradient-brand text-accent-foreground px-8 py-3 rounded-full text-sm font-semibold hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
+              {t.projects.viewAll[lang]} <ArrowUpRight size={16} />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

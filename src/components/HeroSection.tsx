@@ -1,5 +1,6 @@
 import { ArrowDown } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { portfolioEnabled } from "@/config/site";
 
 const HeroSection = () => {
   const { lang, t } = useLanguage();
@@ -33,7 +34,7 @@ const HeroSection = () => {
 
           <div className="flex flex-wrap gap-3 sm:gap-4 items-center pt-2 sm:pt-4">
             <a href="#work" className="bg-gradient-brand text-accent-foreground px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm font-semibold hover:shadow-lg hover:shadow-accent/25 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
-              {t.hero.cta1[lang]}
+              {portfolioEnabled ? t.hero.cta1[lang] : t.hero.ctaSoon[lang]}
             </a>
             <a href="#contact" className="border border-border text-foreground px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm font-medium hover:border-accent hover:text-accent transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
               {t.hero.cta2[lang]}

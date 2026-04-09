@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import { portfolioEnabled } from "@/config/site";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { projects, categories, type ProjectCategory } from "@/data/projects";
 
@@ -11,18 +13,63 @@ const Portfolio = () => {
   const { lang, t } = useLanguage();
 
   useEffect(() => {
-    document.title = lang === "pt"
-      ? "Portfolio — India Rodeia"
-      : "Portfolio — India Rodeia";
     window.scrollTo(0, 0);
-  }, [lang]);
+  }, []);
 
   const filtered = activeFilter === "All"
     ? projects
     : projects.filter((p) => p.categories.includes(activeFilter));
 
+  if (!portfolioEnabled) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Seo
+          title="Portfolio — India Rodeia"
+          description={lang === "pt"
+            ? "O portfolio completo será publicado em breve."
+            : "The full portfolio will be published soon."}
+          path="/portfolio"
+          noindex
+        />
+        <Navbar />
+        <main className="pt-40 pb-24">
+          <section className="container mx-auto px-6">
+            <div className="max-w-3xl rounded-3xl border border-border bg-card p-8 sm:p-10 md:p-12">
+              <span className="inline-flex items-center rounded-full border border-accent/20 bg-accent/5 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-accent">
+                {t.projects.soonBadge[lang]}
+              </span>
+              <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-foreground leading-[0.98]">
+                {t.projects.soonTitle[lang]}
+              </h1>
+              <p className="mt-6 text-muted-foreground text-base sm:text-lg leading-relaxed max-w-2xl">
+                {t.projects.soonText[lang]}
+              </p>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Portfolio — India Rodeia"
+        description={lang === "pt"
+          ? "Projetos de UX/UI, branding, product design e frontend development. Seleção de case studies de India Rodeia com foco em estratégia, execução e impacto."
+          : "UX/UI, branding, product design, and frontend development projects. Selected case studies by India Rodeia focused on strategy, execution, and measurable impact."}
+        path="/portfolio"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "India Rodeia Portfolio",
+          url: "https://indiarodeia.com/portfolio",
+          description: lang === "pt"
+            ? "Seleção de projetos de UX/UI, branding, product design e frontend development."
+            : "Selected UX/UI, branding, product design, and frontend development work.",
+        }}
+      />
       <Navbar />
 
       <main>

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Sun, Moon, Globe } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { portfolioEnabled } from "@/config/site";
 import logoDark from "@/assets/logo_simple.png";
 import logoLight from "@/assets/logo_light.png";
 
@@ -16,7 +17,7 @@ const Navbar = () => {
 
   const navItems = [
     { label: t.nav.work[lang], href: "/#work" },
-    { label: t.nav.portfolio[lang], href: "/portfolio" },
+    ...(portfolioEnabled ? [{ label: t.nav.portfolio[lang], href: "/portfolio" }] : []),
     { label: t.nav.services[lang], href: "/#services" },
     { label: t.nav.about[lang], href: "/#about" },
     { label: t.nav.contact[lang], href: "/#contact" },

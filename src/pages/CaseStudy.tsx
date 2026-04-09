@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import { portfolioEnabled } from "@/config/site";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { projects } from "@/data/projects";
 
@@ -21,14 +23,49 @@ const CaseStudy = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (project) {
-      document.title = `${project.title} — India Rodeia`;
-    }
-  }, [project]);
+  }, []);
+
+  if (!portfolioEnabled) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Seo
+          title="Portfolio — India Rodeia"
+          description={lang === "pt"
+            ? "Os case studies completos serão publicados em breve."
+            : "Full case studies will be published soon."}
+          path="/portfolio"
+          noindex
+        />
+        <Navbar />
+        <main className="pt-40 pb-24">
+          <section className="container mx-auto px-6">
+            <div className="max-w-3xl rounded-3xl border border-border bg-card p-8 sm:p-10 md:p-12">
+              <span className="inline-flex items-center rounded-full border border-accent/20 bg-accent/5 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-accent">
+                {t.projects.soonBadge[lang]}
+              </span>
+              <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-foreground leading-[0.98]">
+                {t.projects.soonTitle[lang]}
+              </h1>
+              <p className="mt-6 text-muted-foreground text-base sm:text-lg leading-relaxed max-w-2xl">
+                {t.projects.soonText[lang]}
+              </p>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!project) {
     return (
       <div className="min-h-screen bg-background">
+        <Seo
+          title={`${t.caseStudy.notFound[lang]} — India Rodeia`}
+          description={lang === "pt" ? "O projeto pedido não foi encontrado." : "The requested project could not be found."}
+          path="/portfolio"
+          noindex
+        />
         <Navbar />
         <main className="pt-40 pb-20 text-center container mx-auto px-6">
           <h1 className="text-4xl font-heading font-bold text-foreground mb-4">{t.caseStudy.notFound[lang]}</h1>
@@ -44,6 +81,24 @@ const CaseStudy = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`${project.title} — India Rodeia`}
+        description={project.description}
+        path={`/portfolio/${project.slug}`}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: project.title,
+          url: `https://indiarodeia.com/portfolio/${project.slug}`,
+          description: project.description,
+          creator: {
+            "@type": "Person",
+            name: "India Rodeia",
+          },
+          dateCreated: project.year,
+          keywords: project.tags.join(", "),
+        }}
+      />
       <Navbar />
 
       <main>

@@ -1,2 +1,13 @@
-node_modules
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+.vite/
+.cache/
+*.log
+*.tsbuildinfo
 .DS_Store
+.env
+.env.*
+!.env.example

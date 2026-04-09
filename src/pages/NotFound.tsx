@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
 const NotFound = () => {
@@ -8,6 +9,12 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <Seo
+        title="404 — India Rodeia"
+        description={lang === "pt" ? "Página não encontrada." : "Page not found."}
+        path="/404"
+        noindex
+      />
       <Navbar />
       <main className="flex-1 flex items-center justify-center">
         <div className="text-center px-6">
